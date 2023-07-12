@@ -1,0 +1,36 @@
+<div class="w-screen h-screen flex">
+  <div class="sidebar flex flex-col justify-between w-96 h-full bg-gray-100">
+    <div class="flex flex-col">
+      <div class="h-20 w-full flex justify-center items-center">
+        <img src="assets/logo.png" class="h-10">
+        <h3 class="font-bold text-3xl ml-4 text-gray-600">kanban</h3>
+      </div>
+      <div class="flex flex-col w-full">
+        <h2 class="text-sm my-6 mx-4">Todos os quadros</h2>
+        <button class="w-11/12 h-16 flex bg-purple-700 rounded-r-3xl text-white mb-4 text-left pl-4 items-center hover:bg-purple-700 hover:text-white">
+          <img src="assets/kanban.png" class="mr-2 h-6">Quadro 1
+        </button>
+        <button class="w-11/12 h-16 flex rounded-r-3xl mb-4 text-left pl-4 items-center hover:bg-purple-700 hover:text-white">
+          <img src="assets/kanban.png" class="mr-2 h-6">Quadro 2
+        </button>
+        <button class="w-11/12 h-16 flex rounded-r-3xl mb-4 text-left pl-4 items-center text-purple-700">
+          + Criar novo quadro
+        </button>
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <div class="perfil flex justify-between items-center bg-gray-600 rounded-md m-4 px-4 py-2 text-white">
+        <div class="rounded-full w-10 h-10 bg-white"></div>
+        <h3 class="text-sm ml-4">Nome da pessoa</h3>
+        <button><img src="assets/logout.png" alt="logout" class="h-8 w-auto"></button>
+      </div>
+    </div>
+  </div>
+  <div class="main flex w-full h-full justify-center items-center" *ngIf="!board">
+    <h3 class="text-center">Não há quadros abertos. <br>Selecione um quadro a esquerda para visualizar. <br>Ou crie um novo quadro para começar.</h3>
+  </div>
+  <div class="main flex w-full h-full" *ngIf="board">
+    <!-- <router-outlet></router-outlet> -->
+    <app-board class="w-full"></app-board>
+  </div>
+</div>

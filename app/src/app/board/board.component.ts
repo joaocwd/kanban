@@ -6,6 +6,8 @@ import {
   CdkDrag,
   CdkDropList,
 } from '@angular/cdk/drag-drop';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-board',
@@ -13,11 +15,16 @@ import {
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent {
+
+  constructor(
+    public dialog: MatDialog
+  ) { }
+
   boardName = 'Quadro 1'
 
-  todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
+  todo = ['Ir para o trabalho', 'Comprar mantimentos', 'Ir para casa', 'Adormecer'];
 
-  done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
+  done = ['Levantar', 'Escovar os dentes', 'Tomar um banho', 'Verificar o e-mail', 'Passear com o cachorro'];
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -31,4 +38,20 @@ export class BoardComponent {
       );
     }
   }
+
+  openNewTask() {
+    const dialogRef = this.dialog.open(DialogNewTask);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }
+
+@Component({
+  selector: 'dialog-new-task',
+  templateUrl: 'dialog-new-task.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule],
+})
+export class DialogNewTask { }

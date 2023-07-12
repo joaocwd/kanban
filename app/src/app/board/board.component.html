@@ -2,7 +2,7 @@
     <div class="topbar h-24 w-full bg-gray-100 px-4 flex justify-between items-center">
         <h2 class="text-2xl font-semibold text-gray-600">{{ boardName }}</h2>
         <div class="flex">
-            <button class="rounded-full bg-purple-700 text-white p-3">+ Nova tarefa</button>
+            <button (click)="openNewTask()" class="rounded-full bg-purple-700 text-white p-3">+ Nova tarefa</button>
             <button mat-icon-button [matMenuTriggerFor]="menu" class="ml-4 mt-2">
                 <mat-icon>more_vert</mat-icon>
             </button>

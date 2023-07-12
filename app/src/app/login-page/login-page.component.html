@@ -1,0 +1,28 @@
+<div class="w-screen h-screen bg-gray-200 flex justify-center items-center">
+    <div class="w-96 bg-white rounded-xl flex flex-col items-center p-6" *ngIf="!register && !forgot">
+        <h2 class="text-3xl font-semibold">Bem vindo!</h2>
+        <h3 class="text-center text-sm my-4">Informe abaixo suas informações de entrada para continuarmos.</h3>
+        <input type="text" class="w-full mt-4 px-2 py-4 bg-gray-100 rounded-xl" placeholder="Email">
+        <input type="password" class="w-full mt-4 px-2 py-4 bg-gray-100 rounded-xl" placeholder="Senha">
+        <div class="flex w-full mt-4">
+            <button routerLink="/" class="mr-2 w-full h-16 bg-purple-600 text-white rounded-xl">Entrar</button>
+            <button (click)="registrar()" class="ml-2 w-full h-16 bg-purple-600 text-white rounded-xl">Registrar</button>
+        </div>
+        <button (click)="esqueci()" class="text-center mt-4">Esqueci minha senha!</button>
+    </div>
+    <div class="w-96 bg-white rounded-xl flex flex-col items-center p-6" *ngIf="register && !forgot">
+        <h2 class="text-3xl font-semibold">Registro</h2>
+        <h3 class="text-center text-sm my-4">Informe abaixo suas informações de entrada para criamos uma nova conta para você.</h3>
+        <input type="text" class="w-full mt-4 px-2 py-4 bg-gray-100 rounded-xl" placeholder="Nome completo">
+        <input type="text" class="w-full mt-4 px-2 py-4 bg-gray-100 rounded-xl" placeholder="Email">
+        <input type="password" class="w-full mt-4 px-2 py-4 bg-gray-100 rounded-xl" placeholder="Senha">
+        <input type="passwordAgain" class="w-full mt-4 px-2 py-4 bg-gray-100 rounded-xl" placeholder="Repita a senha">
+        <button routerLink="/" class="w-full h-16 bg-purple-600 text-white rounded-xl mt-4">Registrar</button>
+    </div>
+    <div class="w-96 bg-white rounded-xl flex flex-col items-center p-6" *ngIf="!register && forgot">
+        <h2 class="text-3xl font-semibold">Esqueci minha senha</h2>
+        <h3 class="text-center text-sm my-4">Informe abaixo o email utilizado na criação da conta.</h3>
+        <input type="text" class="w-full mt-4 px-2 py-4 bg-gray-100 rounded-xl" placeholder="Email">
+        <button (click)="sendEmail()" class="mt-4 w-full h-16 bg-purple-600 text-white rounded-xl">Enviar email</button>
+    </div>
+</div>

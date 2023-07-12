@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 // import {
 //   CdkDragDrop,
 //   moveItemInArray,
@@ -15,20 +16,13 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'app';
   board = true;
-  // todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
 
-  // done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
+  constructor(
+    private router: Router
+  ) {}
 
-  // drop(event: CdkDragDrop<string[]>) {
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     transferArrayItem(
-  //       event.previousContainer.data,
-  //       event.container.data,
-  //       event.previousIndex,
-  //       event.currentIndex,
-  //     );
-  //   }
-  // }
+  shouldDisplayLayout(): boolean {
+    const currentUrl = this.router.url;
+    return currentUrl !== '/login';
+  }
 }

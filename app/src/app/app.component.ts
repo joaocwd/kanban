@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'app';
   board = true;
+  darkTheme = false;
 
   constructor(
     private router: Router,
@@ -32,8 +33,8 @@ export class AppComponent {
     return currentUrl !== '/login';
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(DialogContentExampleDialog);
+  openNewBoard() {
+    const dialogRef = this.dialog.open(DialogNewBoard);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -47,4 +48,4 @@ export class AppComponent {
   standalone: true,
   imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
 })
-export class DialogContentExampleDialog {}
+export class DialogNewBoard {}

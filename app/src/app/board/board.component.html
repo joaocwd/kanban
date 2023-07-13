@@ -3,21 +3,13 @@
         <h2 class="text-2xl font-semibold text-gray-600">{{ boardName }}</h2>
         <div class="flex">
             <button (click)="openNewTask()" class="rounded-full bg-purple-700 text-white p-3">+ Nova tarefa</button>
-            <button mat-icon-button [matMenuTriggerFor]="menu" class="ml-4 mt-2">
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="ml-4">
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
                 <button mat-menu-item>
-                    <mat-icon>dialpad</mat-icon>
-                    <span>Redial</span>
-                </button>
-                <button mat-menu-item disabled>
-                    <mat-icon>voicemail</mat-icon>
-                    <span>Check voice mail</span>
-                </button>
-                <button mat-menu-item>
-                    <mat-icon>notifications_off</mat-icon>
-                    <span>Disable alerts</span>
+                    <mat-icon>delete</mat-icon>
+                    <span>Excluir quadro</span>
                 </button>
             </mat-menu>
         </div>
@@ -33,7 +25,10 @@
               [cdkDropListConnectedTo]="[doneList]"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+                <div class="w-full p-4 border-gray-200 rounded-xl border-2 my-3 flex flex-col" *ngFor="let item of todo" cdkDrag (click)="openTasks()">
+                    <h4>{{item}}</h4>
+                    <h4 class="text-sm mt-4">1 de 3 tarefas concluídas</h4>
+                </div>
             </div>
           </div>
           
@@ -47,7 +42,10 @@
               [cdkDropListConnectedTo]="[todoList]"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
+                <div class="w-full p-4 border-gray-200 rounded-xl border-2 my-3 flex flex-col" *ngFor="let item of done" cdkDrag (click)="openTasks()">
+                    <h4>{{item}}</h4>
+                    <h4 class="text-sm mt-4">1 de 3 tarefas concluídas</h4>
+                </div>
             </div>
           </div>          
     </div>

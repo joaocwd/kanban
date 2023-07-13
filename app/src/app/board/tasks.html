@@ -1,0 +1,22 @@
+<div style="min-width: 600px;" class="min-w-screen-sm h-96 flex flex-col p-4">
+    <h1 class="text-2xl font-bold mb-4">Lista de Tarefas</h1>
+  
+    <div class="flex mb-4">
+      <input [(ngModel)]="novaTarefa"
+        class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-l-md focus:outline-none focus:ring-0"
+        type="text" placeholder="Digite uma nova tarefa">
+      <button (click)="adicionarTarefa()"
+        class="px-4 py-2 bg-purple-500 text-white font-semibold rounded-r-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">Adicionar</button>
+    </div>
+  
+    <ul class="bg-white rounded-md shadow divide-y divide-gray-300">
+      <li *ngFor="let tarefa of tarefas" class="px-4 py-2">
+        <label class="flex items-center">
+          <input type="checkbox" [(ngModel)]="tarefa.concluida" (change)="alterarConclusao(tarefa)"
+            class="form-checkbox h-4 w-4 text-purple-500 rounded-sm">
+          <span class="ml-2">{{ tarefa.nome }}</span>
+        </label>
+      </li>
+    </ul>
+  </div>
+  

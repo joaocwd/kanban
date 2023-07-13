@@ -7,12 +7,3 @@ export const CurrentUser = createParamDecorator(
     return request.user ?? null;
   }
 );
-
-export const CurrentProfile = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    if (!request.user) throw new BadRequestException(['Falha na autenticação do usuário'])
-    console.log(request.user.profile)
-    return request.user.profile ?? null;
-  }
-);

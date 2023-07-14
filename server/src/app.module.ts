@@ -5,9 +5,18 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/users/entities/user.entity';
+import { BoardsModule } from './boards/boards.module';
+import { Board } from './boards/entities/board.entity';
+import { Columns } from './boards/entities/column.entity';
+import { Subtask } from './boards/entities/subtask.entity';
+import { Task } from './boards/entities/task.entity';
 
 const entities = [
-  User
+  User,
+  Board,
+  Columns,
+  Task,
+  Subtask
 ]
 
 @Module({
@@ -24,6 +33,7 @@ const entities = [
       entities,
       synchronize: true,
     }),
+    BoardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

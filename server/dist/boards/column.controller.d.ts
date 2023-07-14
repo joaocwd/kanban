@@ -21,5 +21,5 @@ export declare class ColumnsController {
     delete({ boardId, id }: {
         boardId: any;
         id: any;
-    }, user: User): Promise<typeof import("@nestjs/common").UnauthorizedException | import("./entities/column.entity").Columns[]>;
+    }, user: User): Promise<import("./entities/column.entity").Columns[] | typeof import("@nestjs/common").UnauthorizedException>;
 }

@@ -30,7 +30,8 @@ let UsersService = exports.UsersService = class UsersService {
         return {
             id: user.id,
             email: user.email,
-            fullName: user.fullName
+            fullName: user.fullName,
+            boards: user.boards
         };
     }
     async getAllUserInfo(currentUser) {

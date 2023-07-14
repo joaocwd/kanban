@@ -10,5 +10,5 @@ export declare class ColumnsService {
     getOne(boardId: number, id: number, user: User): Promise<Columns>;
     create(boardId: number, data: CreateColumnsDto, user: User): Promise<Columns[]>;
     update(boardId: number, id: number, data: UpdateColumnsDto, user: User): Promise<Columns[]>;
-    delete(boardId: number, id: number, user: User): Promise<typeof UnauthorizedException | Columns[]>;
+    delete(boardId: number, id: number, user: User): Promise<Columns[] | typeof UnauthorizedException>;
 }

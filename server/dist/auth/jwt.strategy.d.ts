@@ -9,6 +9,7 @@ export declare class JwtStrategy extends JwtStrategy_base {
         fullName: string;
         email: string;
         password: string;
+        boards: import("../boards/entities/board.entity").Board[];
     }>;
 }
 export {};

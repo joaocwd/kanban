@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+const board_entity_1 = require("../../../boards/entities/board.entity");
 const typeorm_1 = require("typeorm");
 let User = exports.User = class User {
 };
@@ -29,6 +30,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => board_entity_1.Board, board => board.user, { eager: true, cascade: true }),
+    __metadata("design:type", Array)
+], User.prototype, "boards", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

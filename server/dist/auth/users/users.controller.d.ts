@@ -9,6 +9,7 @@ export declare class UsersController {
         id: number;
         email: string;
         fullName: string;
+        boards: import("../../boards/entities/board.entity").Board[];
     }>;
     login(user: LoginUserDto): Promise<{
         id: number;

@@ -11,6 +11,7 @@ export declare class UsersService {
         id: number;
         email: string;
         fullName: string;
+        boards: import("../../boards/entities/board.entity").Board[];
     }>;
     getAllUserInfo(currentUser: any): Promise<User>;
     login(body: LoginUserDto): Promise<{

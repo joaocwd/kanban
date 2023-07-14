@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,8 @@ export class AppComponent implements OnInit {
 
   name = ''
 
+  boards: any = []
+
   constructor(
     private router: Router,
     private system: SystemService,
@@ -49,6 +51,8 @@ export class AppComponent implements OnInit {
     if (token) this.system.getUserData(token).subscribe(
       (data: any) => {
         this.name = data.fullName.split(' ')[0]
+        this.boards = data.boards
+        console.log(data)
         console.log(this.name, data)
       },
       error => {
@@ -65,6 +69,10 @@ export class AppComponent implements OnInit {
   openNewBoard() {
     const dialogRef = this.dialog.open(DialogNewBoard);
 
+    dialogRef.componentInstance.updating.subscribe(() => {
+      this.saveUserInfo()
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
@@ -80,6 +88,30 @@ export class AppComponent implements OnInit {
   selector: 'dialog-new-board',
   templateUrl: 'dialog-new-board.html',
   standalone: true,
-  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, ReactiveFormsModule],
 })
-export class DialogNewBoard {}
+export class DialogNewBoard {
+  @Output() updating: EventEmitter<any> = new EventEmitter();
+  
+  boardForm: FormGroup = new FormGroup({
+    name: new FormControl('', Validators.required),
+  });
+
+  constructor(
+    private system: SystemService
+  ) {}
+
+  newBoard() {
+    if (this.boardForm.valid) {
+      this.system.newBoard(localStorage.getItem('token')!, this.boardForm.value.name).subscribe(
+        (dados: any) => {
+          console.log(dados)
+          this.updating.emit();
+        },
+        error => {
+          console.log(error)
+        }
+      )
+    }
+  }
+}

@@ -18,4 +18,17 @@ export class SystemService {
       }
     })
   }
+
+  newBoard(token: string, name: string) {
+    return this.http.post(
+      `${this.api}/boards/`,
+      {
+        name
+      },
+      {
+        headers: {
+          "Authorization": token
+        }
+      })
+  }
 }

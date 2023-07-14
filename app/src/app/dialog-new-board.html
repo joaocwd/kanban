@@ -1,11 +1,11 @@
 <!-- <h1 mat-dialog-title>Hi</h1> -->
-<div mat-dialog-content class="w-96">
+<div mat-dialog-content class="w-96" [formGroup]="boardForm">
   <p>Qual é o nome do quadro?</p>
   <mat-form-field class="w-full mt-4">
     <mat-label>Ex: Quadro 1</mat-label>
-    <input matInput>
+    <input matInput formControlName="name">
   </mat-form-field>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-button cdkFocusInitial>Criar</button>
+  <button (click)="newBoard()" mat-button cdkFocusInitial mat-dialog-close>Criar</button>
 </div>

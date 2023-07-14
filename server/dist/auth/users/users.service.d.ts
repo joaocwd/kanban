@@ -17,6 +17,9 @@ export declare class UsersService {
         id: number;
         token: string;
     }>;
-    create(newUser: CreateUserDto): Promise<CreateUserDto & User>;
+    create(newUser: CreateUserDto): Promise<{
+        id: number;
+        token: string;
+    }>;
     forgotPassword(user: any): Promise<void>;
 }

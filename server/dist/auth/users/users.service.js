@@ -60,7 +60,12 @@ let UsersService = exports.UsersService = class UsersService {
     async create(newUser) {
         newUser.password = (0, crypto_js_1.SHA256)(newUser.password).toString();
         const user = await this.usersRepository.save(newUser);
-        return user;
+        const token = this.authService.getTokenForUser(user);
+        const response = {
+            id: user.id,
+            token
+        };
+        return response;
     }
     async forgotPassword(user) {
     }

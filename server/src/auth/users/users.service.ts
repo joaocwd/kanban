@@ -14,10 +14,10 @@ export class UsersService {
         private readonly authService: AuthService,
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
-    ){}
+    ) { }
 
-    public async getCurrentUser(@CurrentUser() currentUser) {      
-        const user = await this.usersRepository.findOne({where: {id: currentUser.id}})
+    public async getCurrentUser(@CurrentUser() currentUser) {
+        const user = await this.usersRepository.findOne({ where: { id: currentUser.id } })
         return {
             id: user.id,
             email: user.email,
@@ -26,13 +26,13 @@ export class UsersService {
     }
 
     public async getAllUserInfo(@CurrentUser() currentUser) {
-        const user = await this.usersRepository.findOne({where: {id: currentUser.id}})
+        const user = await this.usersRepository.findOne({ where: { id: currentUser.id } })
         return user
     }
 
-    public async login (body: LoginUserDto) {
+    public async login(body: LoginUserDto) {
         console.log(body)
-        const user = await this.usersRepository.findOne({where: {email: body.email}})
+        const user = await this.usersRepository.findOne({ where: { email: body.email } })
         if (user) {
             if (SHA256(body.password).toString() === user.password) {
                 const token = this.authService.getTokenForUser(user)
@@ -52,7 +52,12 @@ export class UsersService {
     public async create(newUser: CreateUserDto) {
         newUser.password = SHA256(newUser.password).toString()
         const user = await this.usersRepository.save(newUser)
-        return user
+        const token = this.authService.getTokenForUser(user)
+        const response = {
+            id: user.id,
+            token
+        }
+        return response
     }
 
     public async forgotPassword(@CurrentUser() user) {

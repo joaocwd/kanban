@@ -14,6 +14,9 @@ export declare class UsersController {
         id: number;
         token: string;
     }>;
-    register(createUser: CreateUserDto): Promise<CreateUserDto & User>;
+    register(createUser: CreateUserDto): Promise<{
+        id: number;
+        token: string;
+    }>;
     forgotPassword(user: User): Promise<void>;
 }

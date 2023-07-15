@@ -1,28 +1,26 @@
 <h2 mat-dialog-title>Nova tarefa</h2>
 <mat-dialog-content class="mat-typography">
     <div class="container mx-auto px-4 py-8 w-96">
-        <form class="max-w-md mx-auto">
+        <form class="max-w-md mx-auto" [formGroup]="taskForm">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm mb-2" for="tarefa">Tarefa</label>
-                <textarea
+                <textarea formControlName="title"
                     class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300"
                     id="tarefa" name="tarefa" rows="4" placeholder="Digite a descrição da tarefa"></textarea>
             </div>
     
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm mb-2" for="coluna">Coluna</label>
-                <select
+                <select formControlName="columnId"
                     class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300"
                     id="coluna" name="coluna">
-                    <option value="todo">Para Fazer</option>
-                    <option value="in-progress">Em Progresso</option>
-                    <option value="done">Concluído</option>
+                    <option *ngFor="let column of data.columns" [value]="column.id">{{ column.title }}</option>
                 </select>
             </div>
     
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm mb-2" for="cor">Cor de Destaque</label>
-                <input
+                <input formControlName="color"
                     class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300"
                     type="color" id="cor" name="cor" value="#ff0000">
             </div>
@@ -31,5 +29,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Fechar</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Criar</button>
+    <button (click)="saveTask()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Criar</button>
 </mat-dialog-actions>

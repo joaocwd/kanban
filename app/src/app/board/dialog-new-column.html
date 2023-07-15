@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Nova coluna</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="container mx-auto px-4 py-8 w-96">
+        <form class="max-w-md mx-auto" [formGroup]="columnForm">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm mb-2" for="tarefa">Coluna</label>
+                <input type="text" formControlName="title"
+                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300"
+                    id="tarefa" name="tarefa" placeholder="Digite a descrição da tarefa">
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Fechar</button>
+    <button (click)="saveColumn()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Criar</button>
+</mat-dialog-actions>

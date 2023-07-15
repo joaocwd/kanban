@@ -1,4 +1,4 @@
-<div class="w-full h-screen flex flex-col">
+<div style="min-width: calc(100vw - 300px);max-width: calc(100vw - 300px);" class="h-screen flex flex-col">
     <div class="topbar h-24 w-full bg-gray-100 px-4 flex justify-between items-center">
         <h2 class="text-2xl font-semibold text-gray-600">{{ boardName }}</h2>
         <div class="flex">
@@ -7,46 +7,27 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item>
+                <button (click)="openNewColumn()" mat-menu-item>
+                    <mat-icon>view_column</mat-icon>
+                    <span>Nova Coluna</span>
+                </button>
+                <button (click)="openDeleteBoard()" mat-menu-item>
                     <mat-icon>delete</mat-icon>
                     <span>Excluir quadro</span>
                 </button>
             </mat-menu>
         </div>
     </div>
-    <div class="board p-4">
-        <div class="example-container">
-            <h2 class="text-xl font-semibold">To do</h2>
-          
-            <div
-              cdkDropList
-              #todoList="cdkDropList"
-              [cdkDropListData]="todo"
-              [cdkDropListConnectedTo]="[doneList]"
-              class="example-list"
-              (cdkDropListDropped)="drop($event)">
-                <div class="w-full p-4 border-gray-200 rounded-xl border-2 my-3 flex flex-col" *ngFor="let item of todo" cdkDrag (click)="openTasks()">
-                    <h4>{{item}}</h4>
+    <div class="board p-4 flex overflow-x-auto overflow-y-auto h-full" cdkDropListGroup>
+        <div cdkDropList [cdkDropListData]="list" *ngFor="let list of columns" (cdkDropListDropped)="drop($event)" class="mr-10" style="min-width: 400px;">
+            <h2 class="id hidden">{{ list.id }}</h2>
+            <h2 class="text-xl font-semibold mb-4">{{ list.title }}</h2>
+            <div cdkDrag [cdkDragData]="item" *ngFor="let item of list.tasks" [attr.data-task-id]="item.id">
+                <div class="w-full p-4 border-gray-200 rounded-xl border-2 mb-4 flex flex-col" (click)="openTasks()">
+                    <h4>{{ item.title }}</h4>
                     <h4 class="text-sm mt-4">1 de 3 tarefas concluídas</h4>
                 </div>
             </div>
-          </div>
-          
-          <div class="example-container">
-            <h2 class="text-xl font-semibold">Done</h2>
-          
-            <div
-              cdkDropList
-              #doneList="cdkDropList"
-              [cdkDropListData]="done"
-              [cdkDropListConnectedTo]="[todoList]"
-              class="example-list"
-              (cdkDropListDropped)="drop($event)">
-                <div class="w-full p-4 border-gray-200 rounded-xl border-2 my-3 flex flex-col" *ngFor="let item of done" cdkDrag (click)="openTasks()">
-                    <h4>{{item}}</h4>
-                    <h4 class="text-sm mt-4">1 de 3 tarefas concluídas</h4>
-                </div>
-            </div>
-          </div>          
+        </div>
     </div>
 </div>

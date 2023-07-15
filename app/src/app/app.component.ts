@@ -52,11 +52,12 @@ export class AppComponent implements OnInit {
       (data: any) => {
         this.name = data.fullName.split(' ')[0]
         this.boards = data.boards
-        console.log(data)
-        console.log(this.name, data)
+        // console.log(data)
+        // console.log(this.name, data)
       },
       error => {
         console.log('error', error)
+        this.logout()
       }
     )
   }

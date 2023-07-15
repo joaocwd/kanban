@@ -1,13 +1,13 @@
 <div class="w-screen h-screen flex" *ngIf="shouldDisplayLayout()">
-  <div class="sidebar flex flex-col justify-between w-96 h-full bg-gray-100">
-    <div class="flex flex-col">
-      <div class="h-20 w-full flex justify-center items-center">
-        <img src="assets/logo.png" class="h-10">
-        <h3 class="font-bold text-3xl ml-4 text-gray-600">kanban</h3>
-      </div>
+  <div style="min-width: 300px;" class="sidebar flex flex-col justify-between h-full bg-gray-100">
+    <div class="h-20 w-full flex justify-center items-center">
+      <img src="assets/logo.png" class="h-10">
+      <h3 class="font-bold text-3xl ml-4 text-gray-600">kanban</h3>
+    </div>
+    <div class="flex flex-col overflow-y-auto h-full">
       <div class="flex flex-col w-full">
         <h2 class="text-sm my-6 mx-4">Todos os quadros</h2>
-        <button *ngFor="let b of boards" class="w-11/12 h-16 flex bg-purple-700 rounded-r-3xl text-white mb-4 text-left pl-4 items-center hover:bg-purple-700 hover:text-white">
+        <button *ngFor="let b of boards" routerLink="/board/{{b.id}}" routerLinkActive="active" class="w-11/12 h-16 flex rounded-r-3xl mb-4 text-left pl-4 items-center hover:bg-purple-700 hover:text-white">
           <img src="assets/kanban.png" class="mr-2 h-6">{{b.name}}
         </button>
         <button (click)="openNewBoard()" class="w-11/12 h-16 flex rounded-r-3xl mb-4 text-left pl-4 items-center text-purple-700">
@@ -27,8 +27,7 @@
     <h3 class="text-center">Não há quadros abertos. <br>Selecione um quadro a esquerda para visualizar. <br>Ou crie um novo quadro para começar.</h3>
   </div>
   <div class="main flex w-full h-full" *ngIf="board">
-    <!-- <router-outlet></router-outlet> -->
-    <app-board class="w-full"></app-board>
+    <router-outlet></router-outlet>
   </div>
 </div>
 <div *ngIf="!shouldDisplayLayout()">

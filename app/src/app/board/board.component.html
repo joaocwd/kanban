@@ -3,18 +3,18 @@
         <h2 class="text-2xl font-semibold text-gray-600">{{ boardName }}</h2>
         <div class="flex">
             <!-- <button (click)="openNewTask()" class="rounded-full bg-purple-700 text-white p-3">+ Nova tarefa</button> -->
+            <button (click)="openNewColumn()" mat-raised-button class="bg-purple-800 text-white mx-2 mt-2">
+                <mat-icon>view_column</mat-icon>
+                <span>Nova Coluna</span>
+            </button>
+            <button (click)="openNewTask()" mat-raised-button class="bg-purple-800 text-white mx-2 mt-2">
+                <mat-icon>check_circle_outline</mat-icon>
+                <span>Nova Tarefa</span>
+            </button>
             <button mat-icon-button [matMenuTriggerFor]="menu" class="ml-4">
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button (click)="openNewColumn()" mat-menu-item>
-                    <mat-icon>view_column</mat-icon>
-                    <span>Nova Coluna</span>
-                </button>
-                <button (click)="openNewTask()" mat-menu-item>
-                    <mat-icon>check_circle_outline</mat-icon>
-                    <span>Nova Tarefa</span>
-                </button>
                 <button (click)="openDeleteBoard()" mat-menu-item>
                     <mat-icon>delete</mat-icon>
                     <span>Excluir quadro</span>

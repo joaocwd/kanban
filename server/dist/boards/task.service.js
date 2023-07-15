@@ -48,7 +48,9 @@ let TaskService = exports.TaskService = class TaskService {
     async createTask(data, user) {
         if (!user)
             throw new common_1.UnauthorizedException;
-        const { columnId, title, color } = data;
+        let { columnId, title, color } = data;
+        if (!color)
+            color = '#ffffff';
         await this.taskRepo.save({ title, color, column: { id: columnId } });
         const column = await this.columnRepo.findOne({ where: { id: data.columnId }, relations: ['board'] });
         return await this.columnRepo.find({ where: { board: { id: column.board.id } } });

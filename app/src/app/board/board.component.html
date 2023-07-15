@@ -23,7 +23,7 @@
             <h2 class="id hidden">{{ list.id }}</h2>
             <h2 class="text-xl font-semibold mb-4">{{ list.title }}</h2>
             <div cdkDrag [cdkDragData]="item" *ngFor="let item of list.tasks" [attr.data-task-id]="item.id">
-                <div class="w-full p-4 border-gray-200 rounded-xl border-2 mb-4 flex flex-col" (click)="openTasks()">
+                <div class="w-full p-4 border-gray-200 rounded-xl border-2 mb-4 flex flex-col" (click)="openTasks()" [style.background]="item.color" [style.color]="getCorFonte(item.color)">
                     <h4>{{ item.title }}</h4>
                     <h4 class="text-sm mt-4">1 de 3 tarefas concluídas</h4>
                 </div>

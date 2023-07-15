@@ -70,7 +70,7 @@ export class BoardComponent implements OnInit {
     if (id === null) return
     return this.boardService.getBoard(id).subscribe(
       (data: any) => {
-        if(data === null) return
+        if (data === null) return
         this.selectedBoardId = data.id
         this.boardName = data.name
         this.columns = data.columns.sort((a: any, b: any) => a.id - b.id);
@@ -88,32 +88,46 @@ export class BoardComponent implements OnInit {
       .map((column: any) => `column-${column.id}`);
   }
 
-  drop(event: CdkDragDrop<Task[]>): void {    
+  drop(event: CdkDragDrop<Task[]>): void {
     const taskId = Number(event.item.element.nativeElement.getAttribute('data-task-id'));
     const newColumnId = parseInt(event.container.element.nativeElement.getElementsByClassName('id')[0].innerHTML)
     console.log(taskId, newColumnId)
 
     this.boardService.moveTaskColumn(taskId, newColumnId, parseInt(this.selectedBoardId!)).subscribe(
-        (data: any) => {
-          console.log('Task moved successfully');
-          this.columns = data.sort((a: any, b: any) => a.id - b.id);
-          console.log(this.columns)
-        },
-        (error) => {
-          console.error('Failed to move task:', error);
-          // Revert the front-end change if an error occurs
-          moveItemInArray(
-            event.container.data,
-            event.currentIndex,
-            event.previousIndex
-          );
-        }
-      );
+      (data: any) => {
+        console.log('Task moved successfully');
+        this.columns = data.sort((a: any, b: any) => a.id - b.id);
+        console.log(this.columns)
+        moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
+      },
+      (error) => {
+        console.error('Failed to move task:', error);
+        // Revert the front-end change if an error occurs
+        moveItemInArray(
+          event.container.data,
+          event.currentIndex,
+          event.previousIndex
+        );
+      }
+    );
+  }
+
+  getCorFonte(corDeFundo: string): string {
+    // Obtenha os valores RGB da cor de fundo
+    const r = parseInt(corDeFundo.substr(1, 2), 16);
+    const g = parseInt(corDeFundo.substr(3, 2), 16);
+    const b = parseInt(corDeFundo.substr(5, 2), 16);
+  
+    // Calcule o valor de luminosidade usando a fórmula adequada
+    const luminosidade = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  
+    // Retorne a cor da fonte correspondente com base na luminosidade
+    return luminosidade > 0.5 ? 'black' : 'white';
   }
 
   openNewTask() {
     const dialogRef = this.dialog.open(DialogNewTask, {
-      data: {columns: this.columns}
+      data: { columns: this.columns }
     });
 
     dialogRef.componentInstance.updating.subscribe((data) => {
@@ -124,10 +138,10 @@ export class BoardComponent implements OnInit {
       // console.log(`Dialog result: ${result}`);
     });
   }
-  
+
   openNewColumn() {
     const dialogRef = this.dialog.open(DialogNewColumn, {
-      data: {board: this.selectedBoardId}
+      data: { board: this.selectedBoardId }
     });
 
     dialogRef.componentInstance.updating.subscribe((data) => {
@@ -138,10 +152,10 @@ export class BoardComponent implements OnInit {
       // console.log(`Dialog result: ${result}`);
     });
   }
-  
+
   openDeleteBoard() {
     const dialogRef = this.dialog.open(DialogDeleteBoard, {
-      data: {id: this.selectedBoardId, title: this.boardName}
+      data: { id: this.selectedBoardId, title: this.boardName }
     });
 
     dialogRef.componentInstance.updating.subscribe((data) => {
@@ -246,7 +260,7 @@ export class DialogNewColumn {
   constructor(
     private boardService: BoardService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   saveColumn() {
     if (this.columnForm.valid) {

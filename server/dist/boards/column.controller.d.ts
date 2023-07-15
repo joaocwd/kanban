@@ -4,6 +4,12 @@ import { CreateColumnsDto, UpdateColumnsDto } from "./dto/column.dto";
 export declare class ColumnsController {
     private readonly columnService;
     constructor(columnService: ColumnsService);
+    moveTask({ boardId }: {
+        boardId: any;
+    }, body: {
+        taskId: number;
+        newColumnId: number;
+    }, user: User): Promise<import("./entities/column.entity").Columns[]>;
     getAll({ boardId }: {
         boardId: any;
     }, user: User): Promise<import("./entities/column.entity").Columns[]>;

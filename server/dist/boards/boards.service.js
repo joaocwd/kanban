@@ -17,9 +17,11 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const board_entity_1 = require("./entities/board.entity");
 const typeorm_2 = require("@nestjs/typeorm");
+const column_service_1 = require("./column.service");
 let BoardsService = exports.BoardsService = class BoardsService {
-    constructor(boardsRepo) {
+    constructor(boardsRepo, columnService) {
         this.boardsRepo = boardsRepo;
+        this.columnService = columnService;
     }
     async getAll(user) {
         return await this.boardsRepo.find({ where: { user: { id: user.id } } });
@@ -34,12 +36,18 @@ let BoardsService = exports.BoardsService = class BoardsService {
         return await this.boardsRepo.update(id, { user, ...data });
     }
     async delete(id, user) {
+        const board = await this.boardsRepo.findOne({ where: { id } });
+        for (let i = 0; i < board.columns.length; i++) {
+            const column = board.columns[i];
+            await this.columnService.delete(id, column.id, user);
+        }
         return await this.boardsRepo.delete(id);
     }
 };
 exports.BoardsService = BoardsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_2.InjectRepository)(board_entity_1.Board)),
-    __metadata("design:paramtypes", [typeorm_1.Repository])
+    __metadata("design:paramtypes", [typeorm_1.Repository,
+        column_service_1.ColumnsService])
 ], BoardsService);
 //# sourceMappingURL=boards.service.js.map

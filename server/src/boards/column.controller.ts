@@ -11,6 +11,14 @@ export class ColumnsController {
         private readonly columnService: ColumnsService
     ) {}
 
+    @Post('movetask/:boardId')
+    @UseGuards(AuthGuardJwt)
+    async moveTask(@Param() { boardId }, @Body() body: { taskId: number, newColumnId: number }, @CurrentUser() user: User) {
+        console.log('aqui')
+        const { taskId, newColumnId } = body;
+        return await this.columnService.moveTask(boardId, taskId, newColumnId, user);
+    }
+    
     @Get(':boardId')
     @UseGuards(AuthGuardJwt)
     async getAll(@Param() {boardId}, @CurrentUser() user: User) {
@@ -40,4 +48,5 @@ export class ColumnsController {
     async delete(@Param() {boardId, id}, @CurrentUser() user: User) {
         return await this.columnService.delete(boardId, id, user)
     }
+
 }

@@ -50,7 +50,8 @@ let TaskService = exports.TaskService = class TaskService {
             throw new common_1.UnauthorizedException;
         const { columnId, title, color } = data;
         await this.taskRepo.save({ title, color, column: { id: columnId } });
-        return await this.taskRepo.find({ where: { column: { id: data.columnId } } });
+        const column = await this.columnRepo.findOne({ where: { id: data.columnId }, relations: ['board'] });
+        return await this.columnRepo.find({ where: { board: { id: column.board.id } } });
     }
     async createSubtask(taskId, data, user) {
         if (!user)

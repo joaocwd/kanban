@@ -13,7 +13,7 @@ export declare class TaskService {
     getAllSubtasks(columnId: number, taskId: number, user: User): Promise<Subtask[]>;
     getOneTask(id: number, user: User): Promise<Task>;
     getOneSubtask(taskId: number, id: number, user: User): Promise<Subtask>;
-    createTask(data: CreateTaskDto, user: User): Promise<Task[]>;
+    createTask(data: CreateTaskDto, user: User): Promise<Columns[]>;
     createSubtask(taskId: number, data: CreateSubtaskDto, user: User): Promise<Subtask[]>;
     updateTask(id: number, data: UpdateTaskDto, user: User): Promise<Task>;
     updateSubtask(id: number, taskId: number, data: UpdateSubtaskDto, user: User): Promise<Task>;

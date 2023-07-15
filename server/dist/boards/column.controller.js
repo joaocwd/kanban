@@ -23,6 +23,11 @@ let ColumnsController = exports.ColumnsController = class ColumnsController {
     constructor(columnService) {
         this.columnService = columnService;
     }
+    async moveTask({ boardId }, body, user) {
+        console.log('aqui');
+        const { taskId, newColumnId } = body;
+        return await this.columnService.moveTask(boardId, taskId, newColumnId, user);
+    }
     async getAll({ boardId }, user) {
         return await this.columnService.getAll(boardId, user);
     }
@@ -39,6 +44,16 @@ let ColumnsController = exports.ColumnsController = class ColumnsController {
         return await this.columnService.delete(boardId, id, user);
     }
 };
+__decorate([
+    (0, common_1.Post)('movetask/:boardId'),
+    (0, common_1.UseGuards)(auth_guard_jwt_1.AuthGuardJwt),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, current_user_decoration_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, user_entity_1.User]),
+    __metadata("design:returntype", Promise)
+], ColumnsController.prototype, "moveTask", null);
 __decorate([
     (0, common_1.Get)(':boardId'),
     (0, common_1.UseGuards)(auth_guard_jwt_1.AuthGuardJwt),

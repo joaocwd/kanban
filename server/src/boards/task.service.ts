@@ -41,7 +41,8 @@ export class TaskService {
         if (!user) throw new UnauthorizedException
         const {columnId, title, color} = data
         await this.taskRepo.save({title, color, column: {id: columnId}})
-        return await this.taskRepo.find({where: {column: {id: data.columnId}}})
+        const column = await this.columnRepo.findOne({where: {id: data.columnId}, relations: ['board']})
+        return await this.columnRepo.find({where: {board: {id: column.board.id}}})
     }
     async createSubtask(taskId: number, data: CreateSubtaskDto, user: User) {
         if (!user) throw new UnauthorizedException

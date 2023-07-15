@@ -11,7 +11,7 @@ export declare class TaskController {
         columnId: any;
         taskId: any;
     }, user: User): Promise<import("./entities/subtask.entity").Subtask[]>;
-    createTask(data: CreateTaskDto, user: User): Promise<import("./entities/task.entity").Task[]>;
+    createTask(data: CreateTaskDto, user: User): Promise<import("./entities/column.entity").Columns[]>;
     createSubtask({ taskId }: {
         taskId: any;
     }, data: CreateSubtaskDto, user: User): Promise<import("./entities/subtask.entity").Subtask[]>;

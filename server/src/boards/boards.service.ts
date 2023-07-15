@@ -4,13 +4,15 @@ import { CreateBoardDto, UpdateBoardDto } from './dto/boards.dto';
 import { Repository } from 'typeorm';
 import { Board } from './entities/board.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ColumnsService } from './column.service';
 
 @Injectable()
 export class BoardsService {
 
     constructor(
         @InjectRepository(Board)
-        private readonly boardsRepo: Repository<Board>
+        private readonly boardsRepo: Repository<Board>,
+        private readonly columnService: ColumnsService
     ) {}
 
     async getAll(user: User) {
@@ -30,6 +32,11 @@ export class BoardsService {
     }
 
     async delete(id: number, user: User) {
+        const board = await this.boardsRepo.findOne({where: {id}})
+        for (let i = 0; i < board.columns.length; i++) {
+            const column = board.columns[i];
+            await this.columnService.delete(id, column.id, user)
+        }
         return await this.boardsRepo.delete(id)
     }
 

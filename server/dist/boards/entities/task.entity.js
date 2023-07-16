@@ -26,6 +26,10 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
+], Task.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
 ], Task.prototype, "color", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => column_entity_1.Columns, column => column.tasks),

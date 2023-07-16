@@ -1,5 +1,6 @@
 export class CreateTaskDto {
     title: string
+    description?: string
     color?: string
     columnId: number
 }
@@ -11,6 +12,7 @@ export class CreateSubtaskDto {
 
 export class UpdateTaskDto {
     title?: string
+    description?: string
     color?: string
     columnId?: number
 }

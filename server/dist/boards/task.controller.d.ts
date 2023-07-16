@@ -4,6 +4,9 @@ import { CreateSubtaskDto, CreateTaskDto, UpdateSubtaskDto, UpdateTaskDto } from
 export declare class TaskController {
     private readonly taskService;
     constructor(taskService: TaskService);
+    getOneTask({ taskId }: {
+        taskId: any;
+    }, user: User): Promise<import("./entities/task.entity").Task>;
     getAllTasks({ columnId }: {
         columnId: any;
     }, user: User): Promise<import("./entities/task.entity").Task[]>;

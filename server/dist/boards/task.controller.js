@@ -23,6 +23,9 @@ let TaskController = exports.TaskController = class TaskController {
     constructor(taskService) {
         this.taskService = taskService;
     }
+    async getOneTask({ taskId }, user) {
+        return await this.taskService.getOneTask(taskId, user);
+    }
     async getAllTasks({ columnId }, user) {
         return await this.taskService.getAllTasks(columnId, user);
     }
@@ -48,6 +51,15 @@ let TaskController = exports.TaskController = class TaskController {
         return await this.taskService.deleteSubtask(taskId, id, user);
     }
 };
+__decorate([
+    (0, common_1.Get)('get/:taskId'),
+    (0, common_1.UseGuards)(auth_guard_jwt_1.AuthGuardJwt),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, current_user_decoration_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, user_entity_1.User]),
+    __metadata("design:returntype", Promise)
+], TaskController.prototype, "getOneTask", null);
 __decorate([
     (0, common_1.Get)(':columnId'),
     (0, common_1.UseGuards)(auth_guard_jwt_1.AuthGuardJwt),

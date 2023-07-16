@@ -11,6 +11,12 @@ export class TaskController {
         private readonly taskService: TaskService
     ) {}
 
+    @Get('get/:taskId')
+    @UseGuards(AuthGuardJwt)
+    async getOneTask(@Param() {taskId}, @CurrentUser() user: User) {
+        return await this.taskService.getOneTask(taskId, user)
+    }
+
     @Get(':columnId')
     @UseGuards(AuthGuardJwt)
     async getAllTasks(@Param() {columnId}, @CurrentUser() user: User) {
@@ -22,6 +28,7 @@ export class TaskController {
     async getAllSubtasks(@Param() {columnId, taskId}, @CurrentUser() user: User) {
         return await this.taskService.getAllSubtasks(columnId, taskId, user)
     }
+
 
     @Post()
     @UseGuards(AuthGuardJwt)

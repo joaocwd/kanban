@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { env } from '../env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardService {
 
-  private api = `http://localhost:3000`
+  private api = env.api
 
   constructor(
     private http: HttpClient
@@ -22,7 +23,7 @@ export class BoardService {
 
   moveTaskColumn(taskId: number, newColumnId: number, boardId: number) {
     return this.http
-      .post(`http://localhost:3000/column/movetask/${boardId}`, { taskId, newColumnId }, {
+      .post(`${this.api}/column/movetask/${boardId}`, { taskId, newColumnId }, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }
@@ -31,7 +32,7 @@ export class BoardService {
 
   newColumn(boardId: number, title: string) {
     return this.http
-      .post(`http://localhost:3000/column/${boardId}`, { title }, {
+      .post(`${this.api}/column/${boardId}`, { title }, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }
@@ -40,7 +41,7 @@ export class BoardService {
 
   updateColumn(boardId: number, columnId: number, title: string) {
     return this.http
-      .put(`http://localhost:3000/column/${boardId}/${columnId}`, { title }, {
+      .put(`${this.api}/column/${boardId}/${columnId}`, { title }, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }
@@ -49,7 +50,7 @@ export class BoardService {
 
   deleteColumn(boardId: number, id: number) {
     return this.http
-      .delete(`http://localhost:3000/column/${boardId}/${id}`, {
+      .delete(`${this.api}/column/${boardId}/${id}`, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }
@@ -59,7 +60,7 @@ export class BoardService {
   updateBoard(boardId: number, name: string) {
     console.log('bid', boardId)
     return this.http
-      .put(`http://localhost:3000/boards/${boardId}`, { name }, {
+      .put(`${this.api}/boards/${boardId}`, { name }, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }
@@ -68,7 +69,7 @@ export class BoardService {
 
   removeBoard(boardId: number) {
     return this.http
-      .delete(`http://localhost:3000/boards/${boardId}`, {
+      .delete(`${this.api}/boards/${boardId}`, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }
@@ -77,7 +78,7 @@ export class BoardService {
 
   newTask(columnId: number, title: string, description: string = '', color: string = '#592fff') {
     return this.http
-      .post(`http://localhost:3000/task`, { title, description, color, columnId }, {
+      .post(`${this.api}/task`, { title, description, color, columnId }, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }

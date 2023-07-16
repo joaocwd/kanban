@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { env } from '../env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginPageService {
 
-  private api = 'http://localhost:3000'
+  private api = env.api
 
   constructor(
     private http: HttpClient

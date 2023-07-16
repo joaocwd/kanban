@@ -3,14 +3,20 @@
     <div class="container mx-auto px-4 py-8 w-96">
         <form class="max-w-md mx-auto" [formGroup]="taskForm">
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm mb-2" for="tarefa">Tarefa</label>
-                <textarea formControlName="title"
+                <label class="block text-gray-700 text-sm mb-2">Titulo</label>
+                <input formControlName="title"
+                    class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300"
+                    placeholder="Digite um titulo para a tarefa">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm mb-2">Descrição</label>
+                <textarea formControlName="description"
                     class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300"
                     id="tarefa" name="tarefa" rows="4" placeholder="Digite a descrição da tarefa"></textarea>
             </div>
     
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm mb-2" for="coluna">Coluna</label>
+                <label class="block text-gray-700 text-sm mb-2" for="coluna">Status</label>
                 <select formControlName="columnId"
                     class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-300"
                     id="coluna" name="coluna">

@@ -47,12 +47,48 @@ export class BoardService {
       })
   }
 
-  newTask(columnId: number, title: string, color: string = '#592fff') {
+  newTask(columnId: number, title: string, description: string = '', color: string = '#592fff') {
     return this.http
-      .post(`http://localhost:3000/task`, { title, color, columnId }, {
+      .post(`http://localhost:3000/task`, { title, description, color, columnId }, {
         headers: {
           "Authorization": localStorage.getItem('token')!
         }
       })
+  }
+
+  getTask(taskId: number) {
+    return this.http.get(`${this.api}/task/get/${taskId}`, {
+      headers: {
+        "Authorization": localStorage.getItem('token')!
+      }
+    })
+  }
+
+  newSubtasks(taskId: number, text: string) {
+    return this.http.post(`${this.api}/task/${taskId}`, {
+      text
+    }, {
+      headers: {
+        "Authorization": localStorage.getItem('token')!
+      }
+    })
+  }
+
+  removeSubtask(taskId: number, id: number) {
+    return this.http.delete(`${this.api}/task/${taskId}/${id}`, {
+      headers: {
+        "Authorization": localStorage.getItem('token')!
+      }
+    })
+  }
+
+  changeChecked(taskId: number, id: number, checked: boolean) {
+    return this.http.put(`${this.api}/task/${taskId}/${id}`, {
+      checked
+    }, {
+      headers: {
+        "Authorization": localStorage.getItem('token')!
+      }
+    })
   }
 }

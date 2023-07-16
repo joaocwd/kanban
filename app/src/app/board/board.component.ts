@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, ParamMap, Router } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
 import { BoardService } from './board.service';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Task {
   id: number;
@@ -93,12 +94,12 @@ export class BoardComponent implements OnInit {
     const newColumnId = parseInt(event.container.element.nativeElement.getElementsByClassName('id')[0].innerHTML)
     console.log(taskId, newColumnId)
 
+    moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
     this.boardService.moveTaskColumn(taskId, newColumnId, parseInt(this.selectedBoardId!)).subscribe(
       (data: any) => {
         console.log('Task moved successfully');
         this.columns = data.sort((a: any, b: any) => a.id - b.id);
         console.log(this.columns)
-        moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
       },
       (error) => {
         console.error('Failed to move task:', error);
@@ -117,10 +118,10 @@ export class BoardComponent implements OnInit {
     const r = parseInt(corDeFundo.substr(1, 2), 16);
     const g = parseInt(corDeFundo.substr(3, 2), 16);
     const b = parseInt(corDeFundo.substr(5, 2), 16);
-  
+
     // Calcule o valor de luminosidade usando a fórmula adequada
     const luminosidade = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  
+
     // Retorne a cor da fonte correspondente com base na luminosidade
     return luminosidade > 0.5 ? 'black' : 'white';
   }
@@ -131,7 +132,7 @@ export class BoardComponent implements OnInit {
     });
 
     dialogRef.componentInstance.updating.subscribe((data) => {
-      this.columns = data
+      this.columns = data.sort((a: any, b: any) => a.id - b.id);
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -145,7 +146,7 @@ export class BoardComponent implements OnInit {
     });
 
     dialogRef.componentInstance.updating.subscribe((data) => {
-      this.columns = data
+      this.columns = data.sort((a: any, b: any) => a.id - b.id);
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -159,7 +160,7 @@ export class BoardComponent implements OnInit {
     });
 
     dialogRef.componentInstance.updating.subscribe((data) => {
-      this.columns = data
+      this.columns = data.sort((a: any, b: any) => a.id - b.id);
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -167,8 +168,13 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  openTasks() {
-    const dialogRef = this.dialog.open(DialogTasks);
+  openTasks(columnId: number, taskId: number) {
+    const dialogRef = this.dialog.open(DialogTasks, {
+      data: {
+        columnId,
+        taskId
+      }
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       // console.log(`Dialog result: ${result}`);
@@ -189,6 +195,7 @@ export class DialogNewTask {
   taskForm: FormGroup = new FormGroup({
     columnId: new FormControl('', Validators.required),
     title: new FormControl('', Validators.required),
+    description: new FormControl(''),
     color: new FormControl(''),
   });
   selectedColumn: any
@@ -201,7 +208,7 @@ export class DialogNewTask {
   saveTask() {
     if (this.taskForm.valid) {
       console.log(this.taskForm.value)
-      this.boardService.newTask(this.taskForm.value.columnId, this.taskForm.value.title, this.taskForm.value.color).subscribe(
+      this.boardService.newTask(this.taskForm.value.columnId, this.taskForm.value.title, this.taskForm.value.description, this.taskForm.value.color).subscribe(
         data => {
           console.log(data)
           this.updating.emit(data)
@@ -212,35 +219,88 @@ export class DialogNewTask {
   }
 }
 
-interface Tarefa {
-  nome: string;
-  concluida: boolean;
+interface SubTarefa {
+  id?: number
+  text: string;
+  checked: boolean;
 }
 
 @Component({
   selector: 'tasks',
   templateUrl: 'tasks.html',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatFormFieldModule, CommonModule, FormsModule],
+  imports: [MatDialogModule, MatButtonModule, MatFormFieldModule, CommonModule, ReactiveFormsModule, FormsModule, MatIconModule],
 })
-export class DialogTasks {
-  tarefas: Tarefa[] = [
-    { nome: 'andar de carro', concluida: false },
-    { nome: 'seguir a pé', concluida: true }
-  ];
-  novaTarefa: string = '';
+export class DialogTasks implements OnInit {
+  taskTitle = ''
+  taskDescription = ''
+  subtasks: any
+  
+  subForm: FormGroup = new FormGroup({
+    text: new FormControl('', Validators.required),
+  });
 
+  @ViewChild('inputRef') inputElement!: ElementRef<HTMLInputElement>;
 
-  adicionarTarefa(): void {
-    if (this.novaTarefa.trim() !== '') {
-      this.tarefas.push({ nome: this.novaTarefa.trim(), concluida: false });
-      this.novaTarefa = '';
-    }
-    console.log(this.tarefas);
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private boardService: BoardService
+  ) {}
+
+  ngOnInit(): void {
+    this.getSubtasks()
+    this.inputElement.nativeElement.focus()
   }
 
-  alterarConclusao(tarefa: Tarefa): void {
-    tarefa.concluida = !tarefa.concluida;
+  getSubtasks() {
+    const columnId = this.data.columnId;
+    const taskId = this.data.taskId;
+    this.boardService.getTask(taskId).subscribe(
+      (data: any) => {
+        console.log(data)
+        this.taskTitle = data.title
+        this.taskDescription = data.description === '' ? 'Não há descrição.': data.description
+        this.subtasks = data.subtasks
+      },
+      error => {
+        console.log(error)
+      }
+    )
+  }
+
+  adicionarTarefa(): void {
+    const taskId = this.data.taskId;
+    if (this.subForm.valid) {
+      const text = this.subForm.value.text
+      this.boardService.newSubtasks(taskId, text).subscribe(
+        data => {
+          this.subtasks = data
+          this.subForm.reset()
+          this.inputElement.nativeElement.focus()
+        },
+        error => console.log(error)
+      )
+    }
+    console.log(this.subtasks);
+  }
+
+  removeSubtask(id: number) {
+    const taskId = this.data.taskId;
+    this.boardService.removeSubtask(taskId, id).subscribe(
+      (data: any) => {
+        this.subtasks = data.subtasks
+      },
+      error => console.log(error)
+    )
+  }
+
+  alterarConclusao(tarefa: SubTarefa): void {
+    const taskId = this.data.taskId;
+    tarefa.checked = !tarefa.checked;
+    this.boardService.changeChecked(taskId, tarefa.id!, tarefa.checked).subscribe(
+      data => {console.log(data)},
+      error => console.log(error)
+    )
   }
 }
 

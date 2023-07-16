@@ -33,7 +33,8 @@ let BoardsService = exports.BoardsService = class BoardsService {
         return await this.boardsRepo.save({ user, ...data });
     }
     async update(id, data, user) {
-        return await this.boardsRepo.update(id, { user, ...data });
+        console.log(id, data);
+        return await this.boardsRepo.update(id, data);
     }
     async delete(id, user) {
         const board = await this.boardsRepo.findOne({ where: { id } });

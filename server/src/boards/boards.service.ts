@@ -28,7 +28,8 @@ export class BoardsService {
     }
 
     async update(id: number, data: UpdateBoardDto, user: User) {
-        return await this.boardsRepo.update(id, {user, ...data})
+        console.log(id, data)
+        return await this.boardsRepo.update(id, data)
     }
 
     async delete(id: number, user: User) {

@@ -178,6 +178,8 @@ export class BoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       // console.log(`Dialog result: ${result}`);
+      const id = parseInt(this.route.snapshot.paramMap.get('id')!);
+      this.getBoard(id)
     });
   }
 
@@ -265,6 +267,16 @@ export class DialogTasks implements OnInit {
       error => {
         console.log(error)
       }
+    )
+  }
+
+  removeTask() {
+    const taskId = this.data.taskId
+    this.boardService.removeTask(taskId).subscribe(
+      (data: any) => {
+        console.log(data)
+      },
+      error => console.log(error)
     )
   }
 

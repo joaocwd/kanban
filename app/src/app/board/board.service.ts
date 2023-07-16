@@ -74,6 +74,14 @@ export class BoardService {
     })
   }
 
+  removeTask(taskId: number) {
+    return this.http.delete(`${this.api}/task/${taskId}`, {
+      headers: {
+        "Authorization": localStorage.getItem('token')!
+      }
+    })
+  }
+
   removeSubtask(taskId: number, id: number) {
     return this.http.delete(`${this.api}/task/${taskId}/${id}`, {
       headers: {

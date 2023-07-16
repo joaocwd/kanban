@@ -6,30 +6,45 @@
             <button mat-icon-button [matMenuTriggerFor]="menu" class="ml-4">
                 <mat-icon>more_vert</mat-icon>
             </button>
-            <mat-menu #menu="matMenu">
-                <button (click)="openNewColumn()" mat-menu-item >
-                    <mat-icon>view_column</mat-icon>
-                    <span>Nova Coluna</span>
-                </button>
-                <button (click)="openNewTask()" mat-menu-item >
-                    <mat-icon>check_circle_outline</mat-icon>
-                    <span>Nova Tarefa</span>
-                </button>
-                <button (click)="openDeleteBoard()" mat-menu-item>
-                    <mat-icon>delete</mat-icon>
-                    <span>Excluir quadro</span>
-                </button>
-            </mat-menu>
         </div>
+        <mat-menu #menu="matMenu">
+            <button (click)="openNewColumn()" mat-menu-item >
+                <mat-icon>view_column</mat-icon>
+                <span>Nova Coluna</span>
+            </button>
+            <button (click)="openNewTask()" mat-menu-item >
+                <mat-icon>check_circle_outline</mat-icon>
+                <span>Nova Tarefa</span>
+            </button>
+            <button (click)="openDeleteBoard()" mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Excluir quadro</span>
+            </button>
+        </mat-menu>
     </div>
     <div class="board p-4 flex overflow-x-auto overflow-y-auto h-full" cdkDropListGroup>
         <div cdkDropList [cdkDropListData]="list" *ngFor="let list of columns" (cdkDropListDropped)="drop($event)" style="min-width: 400px;" class="mx-2 p-4">
             <h2 class="id hidden">{{ list.id }}</h2>
-            <h2 class="text-xl font-semibold mb-4">{{ list.title }}</h2>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">{{ list.title }}</h2>
+                <button mat-icon-button [matMenuTriggerFor]="columnActions" class="ml-4">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #columnActions="matMenu">
+                    <button (click)="openUpdateColumn(list)" mat-menu-item >
+                        <mat-icon>check_circle_outline</mat-icon>
+                        <span>Renomear</span>
+                    </button>
+                    <button (click)="removeColumn(list.id)" mat-menu-item>
+                        <mat-icon>delete</mat-icon>
+                        <span>Excluir coluna</span>
+                    </button>
+                </mat-menu>
+            </div>
             <div cdkDrag [cdkDragData]="item" *ngFor="let item of list.tasks" [attr.data-task-id]="item.id">
                 <div class="w-full p-4 border-gray-200 rounded-xl border-2 mb-4 flex flex-col" (click)="openTasks(list.id, item.id)" [style.background]="item.color" [style.color]="getCorFonte(item.color)">
                     <h4>{{ item.title }}</h4>
-                    <h4 class="text-sm mt-4">1 de 3 tarefas concluídas</h4>
+                    <h4 class="text-sm mt-4">{{item.subtasks.length}} {{item.subtasks.length === 1 ? 'subtarefa' : 'subtarefas'}}</h4>
                 </div>
             </div>
         </div>

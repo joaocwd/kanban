@@ -1,11 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NavigationEnd, Router } from '@angular/router';
 import { SystemService } from './system.service';
+import { BoardService } from './board/board.service';
 // import {
 //   CdkDragDrop,
 //   moveItemInArray,
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private system: SystemService,
+    private boardService: BoardService,
     public dialog: MatDialog
   ) {}
 
@@ -62,6 +64,16 @@ export class AppComponent implements OnInit {
     )
   }
 
+  removeBoard(id: number) {
+    this.boardService.removeBoard(id).subscribe(
+      data => {
+        console.log(data)
+        this.router.navigate(['/'])
+      },
+      error => console.log(error)
+    )
+  }
+
   shouldDisplayLayout(): boolean {
     const currentUrl = this.router.url;
     return currentUrl !== '/login';
@@ -69,6 +81,20 @@ export class AppComponent implements OnInit {
 
   openNewBoard() {
     const dialogRef = this.dialog.open(DialogNewBoard);
+
+    dialogRef.componentInstance.updating.subscribe(() => {
+      this.saveUserInfo()
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openUpdateBoard(board: any) {
+    const dialogRef = this.dialog.open(DialogUpdateBoard, {
+      data: {board}
+    });
 
     dialogRef.componentInstance.updating.subscribe(() => {
       this.saveUserInfo()
@@ -105,6 +131,46 @@ export class DialogNewBoard {
   newBoard() {
     if (this.boardForm.valid) {
       this.system.newBoard(localStorage.getItem('token')!, this.boardForm.value.name).subscribe(
+        (dados: any) => {
+          console.log(dados)
+          this.updating.emit();
+        },
+        error => {
+          console.log(error)
+        }
+      )
+    }
+  }
+}
+
+@Component({
+  selector: 'dialog-update-board',
+  templateUrl: 'dialog-update-board.html',
+  standalone: true,
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, ReactiveFormsModule],
+})
+export class DialogUpdateBoard implements OnInit {
+  @Output() updating: EventEmitter<any> = new EventEmitter();
+  
+  boardForm: FormGroup = new FormGroup({
+    name: new FormControl('', Validators.required),
+  });
+
+  board: any
+
+  constructor(
+    private boardService: BoardService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
+  ngOnInit(): void {
+    this.board = this.data.board
+  }
+
+  updateBoard() {
+    const id = this.board.id
+    console.log('id', id)
+    if (this.boardForm.valid) {
+      this.boardService.updateBoard(id, this.boardForm.value.name).subscribe(
         (dados: any) => {
           console.log(dados)
           this.updating.emit();

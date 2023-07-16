@@ -15,6 +15,7 @@ import { ActivatedRoute, NavigationEnd, ParamMap, Router } from '@angular/router
 import { Observable, switchMap } from 'rxjs';
 import { BoardService } from './board.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 interface Task {
   id: number;
@@ -41,7 +42,7 @@ export class BoardComponent implements OnInit {
   highlightColor: string | undefined;
   boardName = ''
 
-  selectedBoardId: string | null = null
+  selectedBoardId: number | null = null
 
   columns: any
 
@@ -54,13 +55,14 @@ export class BoardComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.selectedBoardId = id
-    this.getBoard(parseInt(id))
+    this.selectedBoardId = parseInt(id)
+    this.getBoard(this.selectedBoardId)
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (event.url.startsWith('/board')) {
           console.log(event)
           const id = this.route.snapshot.paramMap.get('id')!;
+          console.log(id)
           this.getBoard(parseInt(id))
         }
       }
@@ -83,6 +85,16 @@ export class BoardComponent implements OnInit {
     )
   }
 
+  removeColumn(id: number) {
+    this.boardService.deleteColumn(this.selectedBoardId!, id).subscribe(
+      data => {
+        console.log(data)
+        this.getBoard(this.selectedBoardId!)
+      },
+      error => console.log(error)
+    )
+  }
+
   getConnectedLists(columnId: number): string[] {
     return this.columns
       .filter((column: any) => column.id !== columnId)
@@ -95,7 +107,7 @@ export class BoardComponent implements OnInit {
     console.log(taskId, newColumnId)
 
     moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
-    this.boardService.moveTaskColumn(taskId, newColumnId, parseInt(this.selectedBoardId!)).subscribe(
+    this.boardService.moveTaskColumn(taskId, newColumnId, this.selectedBoardId!).subscribe(
       (data: any) => {
         console.log('Task moved successfully');
         this.columns = data.sort((a: any, b: any) => a.id - b.id);
@@ -183,6 +195,21 @@ export class BoardComponent implements OnInit {
     });
   }
 
+  openUpdateColumn(column: any) {
+    console.log(column)
+    const dialogRef = this.dialog.open(DialogUpdateColumn, {
+      data: {column, boardId: this.selectedBoardId}
+    });
+
+    dialogRef.componentInstance.updating.subscribe((data) => {
+      console.log('meudado', data)
+      this.getBoard(data)
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 
 }
 
@@ -378,5 +405,49 @@ export class DialogDeleteBoard {
       },
       error => console.log(error)
     )
+  }
+}
+
+@Component({
+  selector: 'dialog-update-column',
+  templateUrl: 'dialog-update-column.html',
+  standalone: true,
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, ReactiveFormsModule],
+})
+export class DialogUpdateColumn implements OnInit {
+  @Output() updating: EventEmitter<any> = new EventEmitter();
+  
+  columnForm: FormGroup = new FormGroup({
+    title: new FormControl('', Validators.required),
+  });
+
+  boardId = 0
+  column: any
+
+  constructor(
+    private boardService: BoardService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
+  ngOnInit(): void {
+    this.column = this.data.column
+    this.boardId = this.data.boardId
+  }
+
+  updateColumn() {
+    const id = this.column.id
+    const boardId = this.boardId
+    console.log('id', id)
+    console.log('board', boardId)
+    if (this.columnForm.valid) {
+      this.boardService.updateColumn(this.boardId, id, this.columnForm.value.title).subscribe(
+        (dados: any) => {
+          console.log(dados)
+          this.updating.emit(boardId);
+        },
+        error => {
+          console.log(error)
+        }
+      )
+    }
   }
 }

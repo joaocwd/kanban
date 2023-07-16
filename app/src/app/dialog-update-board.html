@@ -1,0 +1,13 @@
+<!-- <h1 mat-dialog-title>Hi</h1> -->
+<div mat-dialog-content class="w-96" [formGroup]="boardForm">
+  <p>Atualmente este quadro se chama:</p>
+  <p class="mt-4 font-semibold">{{data?.board?.name}}</p>
+  <p class="mt-4">Como você deseja chamá-lo agora?</p>
+  <mat-form-field class="w-full mt-4">
+    <mat-label>Ex: Quadro 1</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button (click)="updateBoard()" mat-button cdkFocusInitial mat-dialog-close>Alterar</button>
+</div>

@@ -38,6 +38,34 @@ export class BoardService {
       })
   }
 
+  updateColumn(boardId: number, columnId: number, title: string) {
+    return this.http
+      .put(`http://localhost:3000/column/${boardId}/${columnId}`, { title }, {
+        headers: {
+          "Authorization": localStorage.getItem('token')!
+        }
+      })
+  }
+
+  deleteColumn(boardId: number, id: number) {
+    return this.http
+      .delete(`http://localhost:3000/column/${boardId}/${id}`, {
+        headers: {
+          "Authorization": localStorage.getItem('token')!
+        }
+      })
+  }
+  
+  updateBoard(boardId: number, name: string) {
+    console.log('bid', boardId)
+    return this.http
+      .put(`http://localhost:3000/boards/${boardId}`, { name }, {
+        headers: {
+          "Authorization": localStorage.getItem('token')!
+        }
+      })
+  }
+
   removeBoard(boardId: number) {
     return this.http
       .delete(`http://localhost:3000/boards/${boardId}`, {

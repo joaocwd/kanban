@@ -6,6 +6,6 @@ async function bootstrap() {
   app.enableCors({
     origin: ['https://kanban-production-643d.up.railway.app'],
   });
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
